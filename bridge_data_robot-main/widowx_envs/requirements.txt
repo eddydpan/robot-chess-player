@@ -7,11 +7,11 @@ imageio-ffmpeg
 matplotlib
 moviepy
 opencv-python
-numpy>=1.23.4
+numpy==1.22.1
 pyquaternion
 scikit-learn
 scikit-image
-scipy
+scipy==1.10.1
 six
 requests
 nvidia_smi
@@ -26,4 +26,3 @@ pickle5
 h5py
 funcsigs
 numba
-git+https://github.com/rail-berkeley/oculus_reader.git
