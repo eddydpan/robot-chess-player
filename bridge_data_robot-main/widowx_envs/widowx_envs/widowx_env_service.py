@@ -171,6 +171,8 @@ class WidowXActionServer():
         return WidowXStatus.SUCCESS
 
     def __observe(self, types: list) -> dict:
+        if self.bridge_env is None:
+            print_red("WARNING: bridge_env is not initialized.")
         if self.bridge_env:
             # we will default return image and proprio only
             obs = self.bridge_env.current_obs()
@@ -387,7 +389,8 @@ def main():
         #  - z: up
 
         # move left up with slanted gripper
-        res = widowx_client.move(np.array([0.2, 0.1, 0.3, 0, 0.47, 0.3]))
+        res = widowx_client.move(np.array([0.2, 0.1, 0.3, 0, 0.47, 0.3])) # widowx_client.move(np.array([0.2, 0.1, 0.3, 0, 0.47, 0.3]))
+        print(f"Move result: {res}")
         assert args.test or res == WidowXStatus.SUCCESS, "move failed"
         show_video(widowx_client, duration=1.5)
 
@@ -415,6 +418,7 @@ def main():
 
         # move right down
         res = widowx_client.move(np.array([0.2, -0.1, 0.1, 0, 1.57, 0]))
+        print(f"Move result: {res}")
         assert args.test or res == WidowXStatus.SUCCESS, "move failed"
         show_video(widowx_client, duration=1.5)
 
