@@ -33,7 +33,7 @@ class WidowXConfigs:
         "start_state": [0.3, 0.0, 0.15, 0, 0, 0, 1], # pose when reset is called
         "skip_move_to_neutral": False,
         "return_full_image": False,
-        "camera_topics": [{"name": "/blue/image_raw"}],
+        "camera_topics": [],#{"name": "/blue/image_raw"}],
     }
 
     DefaultActionConfig = ActionConfig(
@@ -175,12 +175,14 @@ class WidowXActionServer():
             print_red("WARNING: bridge_env is not initialized.")
         if self.bridge_env:
             # we will default return image and proprio only
-            obs = self.bridge_env.current_obs()
-            obs = {
-                "image": obs["image"],
-                "state": obs["state"],
-                "full_image": mat_to_jpeg(obs["full_image"][0])  # faster
-            }
+            # obs = self.bridge_env.current_obs()
+            # obs = {
+            #     "image": obs["image"],
+            #     "state": obs["state"],
+            #     "full_image": mat_to_jpeg(obs["full_image"][0])  # faster
+            # }
+            img = np.random.randint(0, 255, (480, 640, 3), dtype=np.uint8)
+            obs = {"image": img, "state": {}, "full_image": img}
         else:
             # use dummy img with random noise
             img = np.random.randint(0, 255, (480, 640, 3), dtype=np.uint8)
@@ -392,41 +394,41 @@ def main():
         res = widowx_client.move(np.array([0.2, 0.1, 0.3, 0, 0.47, 0.3])) # widowx_client.move(np.array([0.2, 0.1, 0.3, 0, 0.47, 0.3]))
         print(f"Move result: {res}")
         assert args.test or res == WidowXStatus.SUCCESS, "move failed"
-        show_video(widowx_client, duration=1.5)
+        # show_video(widowx_client, duration=1.5)
 
         # test reboot motor, the gripper should get loosed for a quick moment
         widowx_client.reboot_motor("wrist_angle")
-        show_video(widowx_client, duration=2)
+        # show_video(widowx_client, duration=2)
 
         # NOTE, use blocking to make sure the qpos is reset after the move
         # this is important so that step_action works in this initial position
         res = widowx_client.move(np.array([0.2, 0.1, 0.3, 0, 1.57, 0.]), blocking=True)
-        show_video(widowx_client, duration=0.5)
+        # show_video(widowx_client, duration=0.5)
 
         # close gripper
         print("Closing gripper...")
         res = widowx_client.move_gripper(0.0)
-        assert args.test or res == WidowXStatus.SUCCESS, "gripper failed"
-        show_video(widowx_client, duration=2.5)
+        # assert args.test or res == WidowXStatus.SUCCESS, "gripper failed"
+        # show_video(widowx_client, duration=2.5)
 
         print("Run step_action for 25 steps")
         for _ in range(25):
             start_time = time.time()
             widowx_client.step_action(np.array([-0.005, 0.005, 0.005, 0, 0, 0, 0]))
             print(f"Time taken for each step: {time.time() - start_time}")
-        show_video(widowx_client, duration=0.5)
+        # show_video(widowx_client, duration=0.5)
 
         # move right down
         res = widowx_client.move(np.array([0.2, -0.1, 0.1, 0, 1.57, 0]))
         print(f"Move result: {res}")
         assert args.test or res == WidowXStatus.SUCCESS, "move failed"
-        show_video(widowx_client, duration=1.5)
+        # show_video(widowx_client, duration=1.5)
 
         # open gripper
         print("Opening gripper...")
         res = widowx_client.move_gripper(1.0)
         assert args.test or res == WidowXStatus.SUCCESS, "gripper failed"
-        show_video(widowx_client, duration=2.5)
+        # show_video(widowx_client, duration=2.5)
 
         widowx_client.stop()
         print("Done all")

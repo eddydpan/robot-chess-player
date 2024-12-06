@@ -400,15 +400,16 @@ class ImageReachingWidowX(StateReachingWidowX):
 
     def current_obs(self):
         full_obs = super(StateReachingWidowX, self).current_obs()
-        image = full_obs['images'][0]
+        # image = full_obs['images'][0]
         ee_coord = full_obs['full_state'][:3]
         vector_to_goal = self.goal_coord - ee_coord
-        processed_image = self._get_processed_image(image)
+        # processed_image = self._get_processed_image(image)
 
-        obs = {'image': processed_image, 'state': self.get_full_state(), 'vector_to_goal': vector_to_goal,
+        # obs = {'image': processed_image, 'state': self.get_full_state(), 'vector_to_goal': vector_to_goal,
+        obs = {'state': self.get_full_state(), 'vector_to_goal': vector_to_goal,
                'joints': full_obs['qpos'], 'desired_goal': self.goal_coord, 'achieved_goal': ee_coord}
-        if self._hp.return_full_image:
-            obs['full_image'] = image
+        # if self._hp.return_full_image:
+            # obs['full_image'] = image
         # obs['gripper'] = full_obs['state'][-1]  # this dimension is not being updated for now
         return obs
 
@@ -442,7 +443,7 @@ class BridgeDataRailRLPrivateWidowX(WidowXEnv):
         default_dict = {
             'gripper_attached': 'custom',
             'skip_move_to_neutral': True,
-            'camera_topics': [IMTopic('/cam0/image_raw')],
+            'camera_topics': [], #[IMTopic('/cam0/image_raw')],
             'image_crop_xywh': None,  # can be a tuple like (0, 0, 100, 100)
             # 'camera_topics': [IMTopic('/cam0/image_raw'), IMTopic('/cam1/image_raw'), IMTopic('/cam2/image_raw')],
         }
@@ -477,9 +478,10 @@ class BridgeDataRailRLPrivateWidowX(WidowXEnv):
     def current_obs(self):
         t0 = time.time()
         full_obs = super().current_obs()
-        processed_images = np.stack([self._get_processed_image(im) for im in full_obs['images']], axis=0)
+        # processed_images = np.stack([self._get_processed_image(im) for im in full_obs['images']], axis=0)
 
-        obs = {'image': processed_images, 'state': self.get_full_state(),
+        # obs = {'image': processed_images, 'state': self.get_full_state(),
+        obs = {'state': self.get_full_state(),
                'joints': full_obs['qpos'], 'env_done': full_obs['env_done'], 'full_obs': full_obs}
         if full_obs['env_done']:
             obs['terminals'] = 1
@@ -487,7 +489,7 @@ class BridgeDataRailRLPrivateWidowX(WidowXEnv):
             obs['terminals'] = 0
         if self.move_except:
             obs['env_done'] = 1
-        obs['full_image'] = full_obs['images']
+        # obs['full_image'] = full_obs['images']
         obs['t_get_obs'] = time.time() - t0
         return obs
 
