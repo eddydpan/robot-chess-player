@@ -83,7 +83,7 @@ class RobotBaseEnv(BaseEnv):
         else:
             self._cam_names = ['cam{}'.format(i) for i in range(len(self._cameras))]
 
-        self._reset_counter, self._previous_target_qpos = 0, None
+        self._reset_counter, self._previous_target_qpos = 0, np.array([0.3, 0, 0.15, 0, 0, 0, 1])
 
         if not self._hp.start_at_current_pos:
             self._controller.move_to_neutral(duration=3)
@@ -251,8 +251,8 @@ class RobotBaseEnv(BaseEnv):
         logging.getLogger('robot_logger').info('time to set pos'.format(time.time() - t0))
 
         self._previous_target_qpos = tr.transform2state(new_transform, new_gripperstate, self._controller.default_rot)
-        if self._hp.resetqpos_after_every_step:
-            self._reset_previous_qpos()  # this can cause accumulating errors
+        # if self._hp.resetqpos_after_every_step:
+            # self._reset_previous_qpos()  # this can cause accumulating errors
         time.sleep(self._hp.wait_time)
         
         if tstamp_return_obs is None:

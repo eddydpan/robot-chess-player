@@ -9,21 +9,38 @@ from widowx_envs.widowx_env import VR_WidowX
 from widowx_envs.control_loops import TimedLoop
 from widowx_envs.policies.vr_teleop_policy import VRTeleopPolicy
 
+# env_params = {
+#     'camera_topics': [
+#         IMTopic('/D435/color/image_raw', flip=True),
+#                       #IMTopic('/yellow/image_raw'),
+#                     #   IMTopic('/blue/image_raw'),
+#                     #   IMTopic('/wrist/image_raw')
+#                       ],
+#     'depth_camera_topics': [IMTopic('/D435/depth/image_rect_raw', dtype='16UC1')],
+#     'gripper_attached': 'custom',
+#     'skip_move_to_neutral': True,
+#     'move_to_rand_start_freq': -1,
+#     'fix_zangle': 0.1,
+#     'move_duration': 0.2,
+#     'adaptive_wait': True,
+#     'action_clipping': None
+# }
 env_params = {
-    'camera_topics': [
-        IMTopic('/D435/color/image_raw', flip=True),
-                      #IMTopic('/yellow/image_raw'),
-                    #   IMTopic('/blue/image_raw'),
-                    #   IMTopic('/wrist/image_raw')
-                      ],
-    'depth_camera_topics': [IMTopic('/D435/depth/image_rect_raw', dtype='16UC1')],
-    'gripper_attached': 'custom',
-    'skip_move_to_neutral': True,
-    'move_to_rand_start_freq': -1,
-    'fix_zangle': 0.1,
-    'move_duration': 0.2,
-    'adaptive_wait': True,
-    'action_clipping': None
+    "camera_topics": [  # IMTopic('/D435/color/image_raw'),
+        # IMTopic('/yellow/image_raw'),
+        # IMTopic("/blue/image_raw"),
+        # IMTopic('/wrist/image_raw')
+    ],
+    "depth_camera_topics": [
+        # IMTopic("/D435/depth/image_rect_raw", dtype="16UC1")
+    ],
+    "gripper_attached": "custom",
+    "skip_move_to_neutral": True,
+    "move_to_rand_start_freq": -1,
+    "fix_zangle": 0.1,
+    "move_duration": 0.2,
+    "adaptive_wait": True,
+    "action_clipping": None,
 }
 
 agent = {
