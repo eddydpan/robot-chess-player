@@ -76,6 +76,10 @@ class GripperController(GripperControllerBase):
     def close(self):
         self.des_pos = self._lower_limit
 
+    def move(self, pos):
+        clipped_pos = np.clip(pos, self.des_pos_min, self.des_pos_max)
+        self.des_pos = clipped_pos * self._upper_limit + (1-clipped_pos) * self._lower_limit
+
     def set_continuous_position(self, target):
         target_clipped = np.clip(target, self.des_pos_min, self.des_pos_max)
         if target != target_clipped:
@@ -134,7 +138,7 @@ class GripperController(GripperControllerBase):
 
 
 class GripperControllerServer(GripperController):
-    def __init__(self, robot_name, create_node=True, upper_limit=0.037, lower_limit=0.010, des_pos_max=1, des_pos_min=0):
+    def __init__(self, robot_name, create_node=True, upper_limit=0.035, lower_limit=0.010, des_pos_max=1, des_pos_min=0):
         super(GripperControllerServer, self).__init__(robot_name, create_node, upper_limit, lower_limit, des_pos_max, des_pos_min)
 
         rospy.Service('open_gripper', OpenGripper, self.open_gripper_service)
