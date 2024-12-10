@@ -229,7 +229,7 @@ class WidowX_Controller(RobotControllerBase):
         logging.shutdown()
         os.kill(pid, 9)
 
-    def move_to_state(self, target_xyz, target_zangle, duration=1.5):
+    def move_to_state(self, target_xyz, target_zangle, duration=2):
         new_pose = np.eye(4)
         new_pose[:3, -1] = target_xyz
         new_quat = Quaternion(axis=np.array([0.0, 0.0, 1.0]), angle=target_zangle) * Quaternion(matrix=self.default_rot)
@@ -239,7 +239,7 @@ class WidowX_Controller(RobotControllerBase):
     def set_moving_time(self, moving_time):
         self.bot.arm.set_trajectory_time(moving_time=moving_time*1.25, accel_time=moving_time * 0.5)
 
-    def move_to_eep(self, target_pose, duration=1.5, blocking=True, check_effort=True, step=True):
+    def move_to_eep(self, target_pose, duration=2, blocking=True, check_effort=True, step=True):
         try:
             if step and not blocking:
                 # this is a call from the `step` function so we use a custom faster way to set the ee pose
@@ -252,11 +252,13 @@ class WidowX_Controller(RobotControllerBase):
 
             self.des_joint_angles = solution
 
+            # print(self.get_cartesian_pose())
+
             if not success:
                 print('no IK solution found, do nothing')
                 # self.open_gripper()
                 # self.move_to_neutral()
-                # raise Environment_Exception
+                raise Environment_Exception
 
             # if success: 
             #     print(f"Robot moved to "+target_pose+" .")
