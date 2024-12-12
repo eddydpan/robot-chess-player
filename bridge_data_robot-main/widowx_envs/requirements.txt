@@ -27,3 +27,4 @@ h5py
 funcsigs
 numba
 opencv-python
+chess

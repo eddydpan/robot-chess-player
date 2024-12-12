@@ -81,41 +81,42 @@ def main():
     time.sleep(2)
 
     # Move to Quadrant 2's corner
-    client.move(np.array([0.4, -0.15, 0.15, 0, 1.45, np.pi/4]))
+    client.move(np.array([0.35, 0, 0.1, 0, 1.57, 0]))
+    time.sleep(2)
+    client.move(np.array([0.45, -0.15, 0.1, 0, 1.45, np.pi/4]))
     time.sleep(2)
 
-    # Return home
-    client.move(np.array([0.3, 0, 0.1, 0, 1.57, 0]))
-    time.sleep(2)
+    # # Return home
+    # client.move(np.array([0.3, 0, 0.1, 0, 1.57, 0]))
+    # time.sleep(2)
 
-    # Move to Quadrant 3's corner
-    client.move(np.array([0.175, -0.15, 0.1, 0, 1.45, np.pi/4]))
-    time.sleep(2)
+    # # Move to Quadrant 3's corner
+    # client.move(np.array([0.175, -0.15, 0.1, 0, 1.45, np.pi/4]))
+    # time.sleep(2)
     
-    # Return home   
-    client.move(np.array([0.3, 0, 0.1, 0, 1.57, 0]))
-    time.sleep(2)
+    # # Return home   
+    # client.move(np.array([0.3, 0, 0.1, 0, 1.57, 0]))
+    # time.sleep(2)
 
-    # Move to Quadrant 4's corner
-    client.move(np.array([0.17, 0.15, 0.15, 0, 1.57, -np.pi/4]))
-    time.sleep(2)
+    # # Move to Quadrant 4's corner
+    # client.move(np.array([0.17, 0.15, 0.15, 0, 1.57, -np.pi/4]))
+    # time.sleep(2)
 
-    # Pick up Q4 corner piece
-    # pick_up(client, 0.1, is_open)
-    # Move down
-    client.move(np.array([0.17, 0.15, 0.1, 0, 1.57, -np.pi/4]))
-    time.sleep(2)
+    # # Pick up Q4 corner piece
+    # # pick_up(client, 0.1, is_open)
+    # # Move down
+    # client.move(np.array([0.17, 0.15, 0.1, 0, 1.57, -np.pi/4]))
+    # time.sleep(2)
 
-    client.move(np.array([0.17, 0.15, 0.05, 0, 1.57, -np.pi/4]))
-    time.sleep(2)
+    # client.move(np.array([0.17, 0.15, 0.05, 0, 1.57, -np.pi/4]))
+    # time.sleep(2)
 
-    # Return home
-    client.move(np.array([0.15, 0, 0.1, 0, 1.57, 0]))
-    time.sleep(2)
+    # # Return home
+    # client.move(np.array([0.15, 0, 0.1, 0, 1.57, 0]))
+    # time.sleep(2)
     
     
     client.stop()  # Properly stop the client
-    print("Pick and place complete.")
 
 if __name__ == "__main__":
     main()
