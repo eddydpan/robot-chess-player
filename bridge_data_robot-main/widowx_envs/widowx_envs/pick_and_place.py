@@ -71,7 +71,13 @@ def pick_and_place(xy_initial, xy_final, height, clearance_height, client, gripp
 
     client.move_gripper(gripper_width)
     time.sleep(4)
-    client.move(np.array([0.15, 0, 0.15, 0, 1.5, 0]),blocking=blocking) # Move home
+    move = client.move(np.array([0.15, 0, 0.15, 0, 1.5, 0]),blocking=blocking) # Move home
+
+    if move == 2: # in case it can't find a path directly to its final point
+        client.step_action(np.array([-0.05, 0, 0, 0, 0,0,0]),blocking=blocking)
+        time.sleep(1.5)
+        client.move(np.array([0.15, 0, 0.15, 0, 1.5, 0]),blocking=blocking) # Move home
+
     time.sleep(1.5)
     client.move(np.array([x_initial, y_initial, clearance_height+height, 0, 1.5, 0]),blocking=blocking)
     time.sleep(1.5)
@@ -81,12 +87,14 @@ def pick_and_place(xy_initial, xy_final, height, clearance_height, client, gripp
     time.sleep(1.5)
     client.move(np.array([x_initial, y_initial, clearance_height+height, 0, 1.5, 0]),blocking=blocking)
     time.sleep(1.5)
+
     move = client.move(np.array([x_final, y_final, clearance_height+height, 0, 1.5, 0]),blocking=blocking)
     print(move)
     if move == 2: # in case it can't find a path directly to its final point
         client.step_action(np.array([-0.05, 0, 0, 0, 0,0,0]),blocking=blocking)
         time.sleep(1.5)
         client.move(np.array([x_final, y_final, clearance_height+height, 0, 1.5, 0]),blocking=blocking)
+        
     time.sleep(1.5)
     client.move(np.array([x_final, y_final, height+placing_droop+0.002, 0, 1.5, 0]),blocking=blocking)
     time.sleep(1.5)
