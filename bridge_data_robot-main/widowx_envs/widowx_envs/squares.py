@@ -40,41 +40,6 @@ def print_help():
     print_yellow("    r: reset robot")
     print_yellow("    q: quit")
 
-def pick_and_place(xy_initial, xy_final, height, clearance_height, client):
-    '''
-    Pick up an object at a certain position  and place it at a different position.
-
-    Args: 
-        xy_initial: 2-item list containing xy position of object in robot coordinate frame
-        xy_final: 2-item list containing xy position of destination in robot coordinate frame
-        height: height of object
-        clearance_height: height the object must be raised to ensure it doesn't hit any other objects
-        client: the client used to control the robot
-    '''
-    x_initial = xy_initial[0]
-    y_initial = xy_initial[1]
-    x_final = xy_final[0]
-    y_final = xy_initial[1]
-
-    client.move(np.array([0.3, 0, 0.15, 0, 1.57, 0])) # Move home
-    time.sleep(4)
-    client.move(np.array([x_initial, y_initial, clearance_height+height, 0, 1.57, 0]))
-    time.sleep(4)
-    client.move(np.array([x_initial, y_initial, height, 0, 1.57, 0]))
-    time.sleep(4)
-    client.move_gripper(0.0)
-    time.sleep(4)
-    client.move(np.array([x_initial, y_initial, clearance_height+height, 0, 1.57, 0]))
-    time.sleep(4)
-    client.move(np.array([x_final, y_final, clearance_height+height, 0, 1.57, 0]))
-    time.sleep(4)
-    client.move(np.array([x_final, y_final, height, 0, 1.57, 0]))
-    time.sleep(4)
-    client.move_gripper(1.0)
-    time.sleep(4)
-    client.move(np.array([x_final, y_final, clearance_height+height, 0, 1.57, 0]))
-    time.sleep(4)
-
 
 def step_8(initial_pos, client):
     """
