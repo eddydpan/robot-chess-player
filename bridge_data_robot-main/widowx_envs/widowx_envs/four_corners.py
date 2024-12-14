@@ -69,22 +69,22 @@ def main():
     
     # Move to starting position
     time.sleep(2)
-    client.move(np.array([0.3, 0, 0.1, 0, 1.57, 0]))
+    client.move(np.array([0.3, 0.1, 0.1, 0, 1.57, 0]))
     time.sleep(2)
 
     # Move to Quadrant 1's corner
-    client.move(np.array([0.4, 0.15, 0.15, 0, 1.45, np.pi/4]))
-    time.sleep(3)
+    client.move(np.array([0.45, 0.15, 0.08, 0, 1.57, np.pi/4]))
+    time.sleep(5)
 
     # Return home
-    client.move(np.array([0.3, 0, 0.1, 0, 1.57, 0]))
+    client.move(np.array([0.3, 0.1, 0.1, 0, 1.57, 0]))
     time.sleep(2)
 
-    # Move to Quadrant 2's corner
-    client.move(np.array([0.35, 0, 0.1, 0, 1.57, 0]))
-    time.sleep(2)
-    client.move(np.array([0.45, -0.15, 0.1, 0, 1.45, np.pi/4]))
-    time.sleep(2)
+    # # Move to Quadrant 2's corner
+    # client.move(np.array([0.35, 0, 0.1, 0, 1.57, 0]))
+    # time.sleep(2)
+    # client.move(np.array([0.45, -0.15, 0.1, 0, 0, np.pi/4]))
+    # time.sleep(2)
 
     # # Return home
     # client.move(np.array([0.3, 0, 0.1, 0, 1.57, 0]))
