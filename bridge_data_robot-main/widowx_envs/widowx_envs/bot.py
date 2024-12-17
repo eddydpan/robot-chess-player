@@ -37,6 +37,7 @@ heights = {'P' : 0.004,
 board = chess.Board()
 
 def main():
+    captures = 0
     parser = argparse.ArgumentParser(description='Robot Chess Player for the WidowX-200')
     parser.add_argument('--ip', type=str, default='localhost')
     parser.add_argument('--port', type=int, default=5556)
@@ -96,15 +97,23 @@ def main():
             # Play the move on the physical board
 
             bot_from_square, bot_to_square = (bot_move.from_square, bot_move.to_square)
+            # print(poses[bot_from_square])
+            # print(poses[bot_to_square])
             height = heights[board.piece_at(bot_from_square).symbol().upper()]
 
             if board.is_capture(bot_move):
                 print_yellow("Capture!")
-                ######### DAN ############
+                clearance_height = height + 0.1
+                pick_and_place(xy_initial=poses[bot_to_square], 
+                            xy_final=(0.18 + (captures * 0.05), 0.2), 
+                            height=height,
+                            clearance_height=clearance_height, 
+                            client=client)
+
+                captures += 1
                 print(f"Capturing on {bot_move.to_square}")
                 pass
 
-        
             clearance_height = height + 0.1
             pick_and_place(xy_initial=poses[bot_from_square], 
                            xy_final=poses[bot_to_square], 
