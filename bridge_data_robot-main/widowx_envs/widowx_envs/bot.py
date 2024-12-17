@@ -104,8 +104,15 @@ def main():
             if board.is_capture(bot_move):
                 print_yellow("Capture!")
                 clearance_height = height + 0.1
-                pick_and_place(xy_initial=poses[bot_to_square], 
-                            xy_final=(0.18 + (captures * 0.05), 0.2), 
+
+                captures_per_row = 3
+                offset = 0.05
+
+                x_position = 0.18 + (captures // captures_per_row) * offset
+                y_position = 0.2 + (captures % captures_per_row) * offset
+
+                pick_and_place(xy_initial=poses[bot_to_square],
+                            xy_final=(x_position, y_position),
                             height=height,
                             clearance_height=clearance_height, 
                             client=client)
