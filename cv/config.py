@@ -9,6 +9,7 @@ class Corner(Enum):
     ROBOT_R = 97
 
 
+# which corners of the april tags are the corners of the board
 BoardCorners = {
     "ROBOT_L": 0,
     "PLAYER_R": 2,
