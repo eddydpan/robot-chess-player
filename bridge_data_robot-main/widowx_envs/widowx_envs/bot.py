@@ -2,6 +2,7 @@
 
 import argparse
 import numpy as np
+import threading
 import cv2
 import time
 import chess
@@ -12,6 +13,8 @@ import os
 # Add the 'chess-ai' directory to the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../chess-ai')))
 import minimax
+# from widowx_envs.cv import BoardView
+from widowx_envs.cv import BoardView
 import inspect
 
 print_yellow = lambda x: print("\033[93m {}\033[00m" .format(x))
@@ -32,10 +35,12 @@ heights = {'P' : 0.004,
            'N' : 0.000,
            'B' : 0.006,
            'R' : 0.005,
-           'Q' : 0.011,
-           'K' : 0.014,}
+           'Q' : 0.025,
+           'K' : 0.032,}
 
 board = chess.Board()
+
+
 
 def main():
     captures = 0
@@ -48,12 +53,26 @@ def main():
     client.init(WidowXConfigs.DefaultEnvParams, image_size=256)
     print("Starting robot.")
 
+    board_view = BoardView()
+
     is_open = 1
     try:
         playing = True
+        client.move(np.array([0.1, 0, 0.15, 0, 1.5, 0]),blocking=True)
         while playing:
+            post_capture = False
+            # view_thread = threading.Thread(target = board_view.show_frame)
+            # view_thread.start()
+
             # Go home
-            client.move(np.array([0.1, 0, 0.1, 0, 1.57, 0])) # Move home
+            # client.move(np.array([0.1, 0, 0.1, 0, 1.57, 0])) # Move home
+            input("enter when arm is ready")
+
+
+            board_view.locate_board(True)
+            board_view.update_board_state()
+
+            
             time.sleep(1)
             
             legal_moves_lst = [
@@ -66,14 +85,17 @@ def main():
             print_yellow("Enter moves as their algebraic notation. For example, moving a Pawn from e2 to e4 would be <e4>, and moving a Knight from b1 to c3 is <Nc3> (without the <>)" )
 
             valid_input = False
-            while not valid_input:
+            # while not valid_input:
             ## Player's move ##
-                player_move = input("Enter when finished playing the move. White's move: ")
-                if player_move in legal_moves_lst:
-                    print_yellow("Move Accepted")
-                    valid_input = True
-                else:
-                    print("Invalid move. Please input legal move.")
+            input("Enter when finished playing the move. White's move: ")
+            
+            # move validation - use when running without camera
+            # not yet integrated with CV move detection
+            '''if player_move in legal_moves_lst:
+                print_yellow("Move Accepted")
+                valid_input = True
+            else:
+                print("Invalid move. Please input legal move.")'''
 
             # if len(player_move.split(" ")) != 2:
             #     print_yellow("Please enter two arguments.")
@@ -82,26 +104,36 @@ def main():
             # player_to_square = int(player_move.split(" ")[1])
             # # Update the board with the player's move
             # board.push(move=chess.Move(from_square=player_from_square, to_square=player_to_square))
-            board.push_san(player_move)
+
+
+            # determine player move based on camera feed
+            time.sleep(2)
+
+            cell1, cell2 = board_view.find_moved_piece()
+
+            print(cell1, cell2)
+
+            piece1 = board.piece_at(chess.parse_square(cell1))
+            piece2 = board.piece_at(chess.parse_square(cell2))
+
+            print(piece1)
+            print(piece2)
+
+           #  print(piece1.color)
+
+            if piece1 and piece1.color == chess.WHITE:
+                piece = piece1
+                player_from_square = chess.parse_square(cell1)
+                player_to_square = chess.parse_square(cell2)
+            else:
+                player_from_square = chess.parse_square(cell2)
+                piece = piece2
+                player_to_square = chess.parse_square(cell1)
+            
+    
+            board.push(chess.Move(player_from_square, player_to_square))
 
             print(board)
-            ## Bot move ##
-            # bot_move = input("Bot's move: ")
-            # if len(bot_move.split(" ")) != 2:
-            #     print_yellow("Please enter two arguments.")
-            #     continue
-
-            # bot_from_square = int(bot_move.split(" ")[0])
-            # bot_to_square = int(bot_move.split(" ")[1])
-
-            # client.move(np.array([0.15, 0, 0.15, 0, 1.57, 0])) # Move home
-    
-            # height = heights[bot_from_square], poses[bot_to_square], height, clearance_height, client)
-            # # Update the board with the bot's move
-            # board.push(move=chess.Move(from_squared.piece_at(bot_from_square).symbol().upper()]
-            # print(board.piece_at(bot_from_square).symbol().upper())
-            # clearance_height = height + 0.08
-            # pick_and_place(poses[=bot_from_square, to_square=bot_to_square))
             
             # Get the move of the bot
             minmax = minimax.Minimax(board)
@@ -118,6 +150,9 @@ def main():
 
             if board.is_capture(bot_move):
                 print_yellow("Capture!")
+                
+
+                height = heights[board.piece_at(bot_to_square).symbol().upper()]
                 clearance_height = height + 0.1
 
                 captures_per_row = 3
@@ -125,6 +160,10 @@ def main():
 
                 x_position = 0.18 + (captures // captures_per_row) * offset
                 y_position = 0.2 + (captures % captures_per_row) * offset
+
+                print(f"height: {height}")
+                print(f"x_pos: {x_position}")
+                print(f"y_pos: {y_position}")
 
                 pick_and_place(xy_initial=poses[bot_to_square],
                             xy_final=(x_position, y_position),
@@ -134,22 +173,28 @@ def main():
 
                 captures += 1
                 print(f"Capturing on {bot_move.to_square}")
-                pass
+                post_capture = True
 
+            height = heights[board.piece_at(bot_from_square).symbol().upper()]
             clearance_height = height + 0.1
             pick_and_place(xy_initial=poses[bot_from_square], 
                            xy_final=poses[bot_to_square], 
                            height=height, 
                            clearance_height=clearance_height, 
-                           client=client)
+                           client=client,
+                           post_capture=post_capture)
 
             # Update virtual board model
             board.push(bot_move)
             print(board)
             print_yellow("Move played.")
 
+            if cv2.waitKey(1) == ord("q"):
+                playing = False
 
 
+        board_view.cap.release()
+        cv2.destroyAllWindows
 
     except KeyboardInterrupt:
         time.sleep(1)
