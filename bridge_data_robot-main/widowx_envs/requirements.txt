@@ -28,3 +28,5 @@ funcsigs
 numba
 opencv-python
 chess
+apriltag
+shapely
