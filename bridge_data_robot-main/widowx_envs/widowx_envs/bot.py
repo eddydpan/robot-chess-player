@@ -105,7 +105,7 @@ def main():
                 pass
 
         
-            clearance_height = height + 0.08
+            clearance_height = height + 0.1
             pick_and_place(xy_initial=poses[bot_from_square], 
                            xy_final=poses[bot_to_square], 
                            height=height, 
