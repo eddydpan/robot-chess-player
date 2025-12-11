@@ -100,7 +100,7 @@ def main():
             client.reset()
             print_help()
 
-        show_video(client)
+        # show_video(client)
 
     client.stop()  # Properly stop the client
     cv2.destroyAllWindows()
