@@ -48,7 +48,7 @@ def find_placing_droop(pickup_point, place_point):
     return xy_increase * 0.0742
 
 
-def pick_and_place(xy_initial, xy_final, height, clearance_height, client, gripper_width=1,blocking=True):
+def pick_and_place(xy_initial, xy_final, height, clearance_height, client, gripper_width=0.8,blocking=True):
     '''
     Pick up an object at a certain position  and place it at a different position.
 
@@ -69,17 +69,20 @@ def pick_and_place(xy_initial, xy_final, height, clearance_height, client, gripp
 
     height -= pickup_droop
 
+    # Move home
     client.move_gripper(gripper_width)
-    time.sleep(4)
-    move = client.move(np.array([0.15, 0, 0.15, 0, 1.5, 0]),blocking=blocking) # Move home
-
-    if move == 2: # in case it can't find a path directly to its final point
-        client.step_action(np.array([-0.05, 0, 0, 0, 0,0,np.pi / 4]),blocking=blocking)
-        time.sleep(1.5)
-        client.move(np.array([0.15, 0, 0.15, 0, 1.5, np.pi / 4]),blocking=blocking) # Move home
-
     time.sleep(1.5)
-    client.move(np.array([x_initial, y_initial, clearance_height+height, 0, 1.5, np.pi / 4]),blocking=blocking)
+    move = client.move(np.array([0.15, 0, 0.15, 0, 1.5, 0]),blocking=blocking)
+    if move == 2: # in case it can't find a path directly to its final point
+        client.step_action(np.array([-0.05, 0, 0, 0, 0,0, gripper_width]),blocking=blocking)
+        time.sleep(1.5)
+        client.move(np.array([0.15, 0, 0.15, 0, 1.5, 0 / 4]),blocking=blocking)
+    time.sleep(1.5)
+
+    # Pick up piece
+    client.move(np.array([x_initial, y_initial, clearance_height+height, 0, 1.5, 0]),blocking=blocking) # don't roll here so the IK solver doesn't freak out
+    time.sleep(1.5)
+    client.move(np.array([x_initial, y_initial, clearance_height+height, 0, 1.5, np.pi / 4]),blocking=blocking) # roll
     time.sleep(1.5)
     client.move(np.array([x_initial, y_initial, height, 0, 1.5, np.pi / 4]),blocking=blocking)
     time.sleep(1.5)
@@ -88,21 +91,29 @@ def pick_and_place(xy_initial, xy_final, height, clearance_height, client, gripp
     client.move(np.array([x_initial, y_initial, clearance_height+height, 0, 1.5, np.pi / 4]),blocking=blocking)
     time.sleep(1.5)
 
+    # Move piece to final location
     move = client.move(np.array([x_final, y_final, clearance_height+height, 0, 1.5, np.pi / 4]),blocking=blocking)
     print(move)
     if move == 2: # in case it can't find a path directly to its final point
-        client.step_action(np.array([-0.05, 0, 0, 0, 0,0,np.pi / 4]),blocking=blocking)
+        client.step_action(np.array([-0.05, 0, 0.05, 0, 0,0, 0]),blocking=blocking)
         time.sleep(1.5)
         client.move(np.array([x_final, y_final, clearance_height+height, 0, 1.5, np.pi / 4]),blocking=blocking)
-        
     time.sleep(1.5)
+
+    # Placing step
     client.move(np.array([x_final, y_final, height+placing_droop+0.002, 0, 1.5, np.pi / 4]),blocking=blocking)
     time.sleep(1.5)
-    # client.step_action(np.array([0, 0, 0, 0, 0, 0,gripper_width]),blocking=blocking)
     client.move_gripper(gripper_width) # moves to narrow if narrow, otherwise opens fully
     time.sleep(1.5)
     client.move(np.array([x_final, y_final, clearance_height+height, 0, 1.5, np.pi / 4]),blocking=blocking)
-    # time.sleep(4)
+    time.sleep(1.5)
+    client.move(np.array([x_final, y_final, clearance_height+height, 0, 1.5, 0]),blocking=blocking) # Un-roll so the IK solver doesn't freak out
+    time.sleep(1.5)
+    move = client.move(np.array([0.1, 0, 0.15, 0, 1.5, 0]),blocking=blocking) # Move out of the way so camera can read move
+    if move == 2: # in case it can't find a path directly to its final point
+        client.step_action(np.array([-0.05, 0, 0, 0, 0, 0, 1]),blocking=blocking)
+        time.sleep(1.5)
+        client.move(np.array([0.1, 0, 0.15, 0, 1.5, 0]),blocking=blocking) # Move home
     
 
 def main():
@@ -116,11 +127,15 @@ def main():
 
     is_open = 1
 
-    pick_and_place([0.45, -0.14], [0.3, 0], 0.02, 0.08, client, gripper_width=0.7)
+    # pick_and_place([0.45, -0.14], [0.3, 0], 0.02, 0.08, client, gripper_width=0.7)
 
-    pick_and_place([0.3, 0], [0.15, -0.14], 0.02, 0.08, client, gripper_width=0.7)
+    # pick_and_place([0.45, -0.135], [0.35, -0.135], 0.000, 0.1, client, gripper_width=0.7)
 
-    pick_and_place([0.15, -0.14], [0.15, 0], 0.02, 0.08, client, gripper_width=0.7)
+    # pick_and_place([0.35, -0.135], [0.25, -0.135], 0.000, 0.1, client, gripper_width=0.7)
+
+    pick_and_place([0.25, -0.135], [0.15, -0.135], 0.000, 0.1, client, gripper_width=0.7)
+
+    # pick_and_place([0.15, -0.14], [0.15, -1], 0.02, 0.08, client, gripper_width=0.7)
 
     # pick_and_place([0.15, -0.14], [0.3, 0.28], 0.023, 0.08, client, gripper_width=0.7)
     # time.sleep(4)
