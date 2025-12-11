@@ -58,7 +58,11 @@ def main():
 
     is_open = 1
 
-    pick_and_place([0.17, -0.1], [0.17, -0.02], 0.04, 0.08, client, gripper_width=0.7)
+    pick_and_place([0.45, -0.14], [0.3, -0.14], 0.04, 0.08, client, gripper_width=0.7)
+
+    pick_and_place([0.3, -0.14], [0.15, -0.14], 0.02, 0.08, client, gripper_width=0.7)
+
+    pick_and_place([0.15, -0.14], [0.15, 0], 0.0, 0.08, client, gripper_width=0.7)
 
     # client.move(np.array([0.3, 0, 0.15, 0, 1.57, 0]))
     # time.sleep(5)
