@@ -28,7 +28,7 @@ for file in range(8):
 
 # Height dictionary
 heights = {'P' : 0.004,
-           'N' : 0.004,
+           'N' : 0.000,
            'B' : 0.006,
            'R' : 0.005,
            'Q' : 0.011,
