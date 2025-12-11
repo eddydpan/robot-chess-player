@@ -258,6 +258,9 @@ class WidowX_Controller(RobotControllerBase):
                 # self.move_to_neutral()
                 # raise Environment_Exception
 
+            # if success: 
+            #     print(f"Robot moved to "+target_pose+" .")
+
             if check_effort:
                 if np.max(np.abs(self.get_joint_effort()) - ABS_MAX_JOINT_EFFORTS) > 10:
                     print('violation ', np.abs(self.get_joint_effort()) - ABS_MAX_JOINT_EFFORTS)
