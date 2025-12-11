@@ -45,7 +45,7 @@ def find_placing_droop(pickup_point, place_point):
     pickup_disp = distance_from_zero_zero(pickup_point)
     place_disp = distance_from_zero_zero(place_point)
     xy_increase = place_disp - pickup_disp
-    return xy_increase * 0.0742
+    return max(pickup_disp - max(place_disp, 0.3), 0) * -0.0529
 
 
 def pick_and_place(xy_initial, xy_final, height, clearance_height, client, gripper_width=0.8,blocking=True):
@@ -101,7 +101,7 @@ def pick_and_place(xy_initial, xy_final, height, clearance_height, client, gripp
     time.sleep(1.5)
 
     # Placing step
-    client.move(np.array([x_final, y_final, height+placing_droop+0.002, 0, 1.5, np.pi / 4]),blocking=blocking)
+    client.move(np.array([x_final, y_final, height+placing_droop, 0, 1.5, np.pi / 4]),blocking=blocking)
     time.sleep(1.5)
     client.move_gripper(gripper_width) # moves to narrow if narrow, otherwise opens fully
     time.sleep(1.5)
@@ -128,14 +128,20 @@ def main():
     is_open = 1
 
     # pick_and_place([0.45, -0.14], [0.3, 0], 0.02, 0.08, client, gripper_width=0.7)
+# 
+    # pick_and_place([0.45, -0.135], [0.375, -0.135], 0.000, 0.1, client, gripper_width=0.7)
 
-    # pick_and_place([0.45, -0.135], [0.35, -0.135], 0.000, 0.1, client, gripper_width=0.7)
+    # pick_and_place([0.375, -0.135], [0.3, -0.135], 0.000, 0.1, client, gripper_width=0.7)
 
-    # pick_and_place([0.35, -0.135], [0.25, -0.135], 0.000, 0.1, client, gripper_width=0.7)
+    # pick_and_place([0.3, -0.135], [0.225, -0.135], 0.000, 0.1, client, gripper_width=0.7)
 
-    pick_and_place([0.25, -0.135], [0.15, -0.135], 0.000, 0.1, client, gripper_width=0.7)
+    # pick_and_place([0.225, -0.135], [0.15, -0.135], 0.02, 0.08, client, gripper_width=0.7)
 
-    # pick_and_place([0.15, -0.14], [0.15, -1], 0.02, 0.08, client, gripper_width=0.7)
+    pick_and_place([0.15, -0.135], [0.25, -0.135], 0.02, 0.1, client, gripper_width=0.7)
+
+    pick_and_place([0.45, -0.135], [0.3, -0.135], 0.000, 0.1, client, gripper_width=0.7)
+
+    pick_and_place([0.3, -0.135], [0.15, -0.135], 0.000, 0.1, client, gripper_width=0.7)
 
     # pick_and_place([0.15, -0.14], [0.3, 0.28], 0.023, 0.08, client, gripper_width=0.7)
     # time.sleep(4)
