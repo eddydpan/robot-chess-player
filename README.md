@@ -178,6 +178,34 @@ For our stretch goals we would like to look at the following:
         - [ ]  post post post mvp: finger detection
     
 
+### System Architecture 
+
+<img src="/sys_arch.jpg">
+
+
+The diagram above shows all the core components that make up the Chess Bot and the data that flows between them. Further descriptions of each component are below.
+
+base_env: Initializes a class for a high-level base environment for robotics or simulation applications.
+
+robot_base_env: Initializes a class that inherits from base_env with functionality specific to robotics applications.
+
+controller_base: Initializes abstract base classes for creating a controller for a robotic arm and a controller for a gripper end effector.
+
+custom_gripper_controller: Initializes a class for controlling the default WidowX end effector that inherits from GripperControllerBase.
+
+widowx_controller: Initializes a class for controlling the full WidowX robot arm. This class inherits from the RobotControllerBase class. This class creates an instance of GripperController that serves as the controller for the arm’s end effector. This class also contains the code for inverse kinematics abstraction. 
+
+widowX_env: Initializes an environment for interacting with the WidowX arm. This class inherits from the RobotBaseEnv class, creates an instance of WidowXController, and provides additional functionality for starting up and resetting the robot.
+
+widowx_env_service: Creates WidowXActionServer and WidowXClient classes, which allow Python scripts to interface with the robot by running an instance of WidowXActionServer and then creating an instance of WidowXClient in a separate script.
+
+pick_and_place: Creates a function for picking up an object at a certain location and placing it at another location using commands in the WidowXClient class.
+
+chess_ai: This is a submodule that contains the chess engine that the bot uses to calculate its next move, which is located in the file minimax.py.
+
+bot: This file is the executable that reads the user’s moves, calculates the next move, and plays that move on the physical board.
+
+
 In this implantation we could dig more into the machine vision aspect of the project: not only analyzing with machine vision but also finding more elegant, and sensor based methods of localization.
 
 As we go into the next week Mia and Dan will be working on the GUI Eddie will be working on the pose array, Kate will continue working with April tags and and Will will be working on the literal edge cases of the chess words. We plan to have our MVP completed by Wednesday so that we have time to give some of our undivided attention and work on our website.
