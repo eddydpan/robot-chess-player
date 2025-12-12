@@ -13,7 +13,7 @@ Welcome to the Chess-bot landing page. This repository hosts a ROS package that 
 ## Meet the Team
 
 - **Will Young**  
-  Will is a mechanical engineering student at Olin College of Engineering (Class of 2026). He is enthusiastic about robotic arm control, path planning, and ensuring a robust ROS structure for the project. While not a chess master, he claims watching Gotham Chess twice makes him an expert.
+  Will is a mechanical engineering student at Olin College of Engineering (Class of 2026). He is enthusiastic about robotic arm control, path planning, and ensuring a robust architecture for the project. While not a chess master, he claims watching Gotham Chess twice makes him an expert.
 
 - **Mia Chevere**  
   Mia is an electrical and computer engineering student at Olin College of Engineering. She’s excited about the kinematics math involved in moving the arm to precise locations—despite never having taken basic geometry!
@@ -23,6 +23,9 @@ Welcome to the Chess-bot landing page. This repository hosts a ROS package that 
 
 - **Dan Park**  
   Dan is an engineering with computing student at Olin College of Engineering (Class of 2025). He reached the round of 16 in the JPMorgan Chess Competition, so he’s “okay” at chess.
+
+- **Kate McCurley**  
+  Kate is an engineering with robotics student at Olin College of Engineering (Class of 2025). Kate is most excited about working on computer vision as well as getting to work with a robotic arm for the first time. 
 
 ---
 
