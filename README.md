@@ -1,12 +1,12 @@
 # Chess-Bot
 
-## Welcome!
-
-Welcome to the Chess-bot landing page. This repository hosts a ROS package that enables a WidowX-200 robotic arm to play chess in real-time against a human player. The package allows the robot to:
+Welcome to the Robot Chess Player project. This repository hosts a Dockerized bridge that enables a WidowX-200 robotic arm to play chess in real-time against a human player. The package allows the robot to:
 
 - Interpret the changing chessboard using machine vision.
-- Calculate the optimal move.
+- Calculate the optimal move with a custom chess engine.
 - Physically pick up and place chess pieces to execute its move.
+
+We'd like to acknowledge the [UC Berkley Rail Lab](https://github.com/rail-berkeley/bridge_data_robot) for providing a starting point for the Trossen WidowX-250 bridge. For detailed information about our implementation, see the [**portfolio website**](https://eddydpan.github.io/chess_bot/) of the [original repository](https://github.com/eddydpan/chess_bot). This repository is a fork that cleans-up the original repository's Git history.
 
 ---
 
